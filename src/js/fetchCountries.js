@@ -1,18 +1,20 @@
 export function fetchCountries(name) {
-  const url = `https://restcountries.com/v3.1/name/${name}?fullText=true&fields=name.official,capital,population,flags.svg,languages`;
+  const fields = 'name,flags.svg,capital,population,languages';
+  const url = `https://restcountries.com/v3.1/name/${name}?fields=${fields}`;
 
   return fetch(url)
     .then(response => {
-      if (!response.ok) {
-        throw new Error('Country not found');
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(`Request failed with status ${response.status}`);
       }
-      return response.json();
     })
     .then(data => {
       if (Array.isArray(data)) {
         return data;
       } else {
-        return [];
+        throw new Error('Country not found');
       }
     });
 }

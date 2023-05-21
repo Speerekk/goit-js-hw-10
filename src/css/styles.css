@@ -18,3 +18,38 @@ body {
   max-width: 320px;
   margin-bottom: 16px;
 }
+
+input[type='text'] {
+  font-size: 16px;
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+ul.country-list {
+  list-style: none;
+  padding: 0;
+}
+
+ul.country-list li {
+  margin-bottom: 5px;
+}
+
+.flag {
+  width: 20px;
+  height: 14px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.country-card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 20px;
+  background-color: #f8f8f8;
+  margin-top: 20px;
+}
+
+.country-card h2 {
+  margin-top: 0;
+}

@@ -1,79 +1,89 @@
 import './css/styles.css';
+import { fetchCountries } from './js/fetchCountries.js';
 import debounce from 'lodash.debounce';
-import { fetchCountries } from './js/fetchCountries';
 import Notiflix from 'notiflix';
 
-const DEBOUNCE_DELAY = 300;
-
-const searchBox = document.getElementById('search-box');
+const searchBox = document.querySelector('#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 
-// Функция для отображения списка стран
-function renderCountryList(countries) {
-  countryList.innerHTML = '';
+const DEBOUNCE_DELAY = 300;
 
-  if (countries.length === 0) {
-    Notiflix.Notify.info('Oops, there is no country with that name');
-    return;
-  }
+searchBox.addEventListener('input', debounce(handleSearch, DEBOUNCE_DELAY));
 
-  if (countries.length > 10) {
-    Notiflix.Notify.warning(
-      'Too many matches found. Please enter a more specific name.'
-    );
-    return;
-  }
-
-  const listItems = countries
-    .map(
-      country =>
-        `<li><img src="${country.flags.svg}" alt="${country.name.official}">${country.name.official}</li>`
-    )
-    .join('');
-
-  countryList.innerHTML = listItems;
-}
-
-// Функция для отображения информации о стране
-function renderCountryInfo(country) {
-  const languages = country.languages.map(language => language.name).join(', ');
-
-  countryInfo.innerHTML = `
-    <div class="country-card">
-      <img src="${country.flags.svg}" alt="${country.name.official}">
-      <h2>${country.name.official}</h2>
-      <p><strong>Capital:</strong> ${country.capital}</p>
-      <p><strong>Population:</strong> ${country.population}</p>
-      <p><strong>Languages:</strong> ${languages}</p>
-    </div>
-  `;
-}
-
-// Функция для обработки ввода пользователя
-const handleInput = debounce(() => {
+function handleSearch() {
   const searchTerm = searchBox.value.trim();
 
   if (searchTerm === '') {
-    countryList.innerHTML = '';
-    countryInfo.innerHTML = '';
+    clearResults();
     return;
   }
 
   fetchCountries(searchTerm)
     .then(countries => {
-      if (countries.length === 1) {
-        renderCountryInfo(countries[0]);
+      if (countries.length > 10) {
+        Notiflix.Notify.info(
+          'Too many matches found. Please enter a more specific name.'
+        );
+        clearResults();
+      } else if (countries.length >= 2 && countries.length <= 10) {
+        showCountryList(countries);
+        clearCountryInfo();
+      } else if (countries.length === 1) {
+        showCountryInfo(countries[0]);
+        clearCountryList();
       } else {
-        renderCountryList(countries);
+        Notiflix.Notify.failure('Oops, there is no country with that name.');
+        clearResults();
       }
     })
     .catch(error => {
-      Notiflix.Notify.failure('Oops, something went wrong. Please try again.');
+      Notiflix.Notify.failure(
+        'Oops, something went wrong. Please try again later.'
+      );
+      clearResults();
+      console.error(error);
     });
-}, DEBOUNCE_DELAY);
+}
 
-// Назначение обработчика события input
-searchBox.addEventListener('input', handleInput);
+function showCountryList(countries) {
+  countryList.innerHTML = '';
+  countries.forEach(country => {
+    const listItem = document.createElement('li');
+    listItem.innerHTML = `<img src="${country.flags.svg}" alt="${country.name.official}" class="flag" /> ${country.name.official}`;
+    countryList.appendChild(listItem);
+  });
+}
 
-// const DEBOUNCE_DELAY = 300;
+function showCountryInfo(country) {
+  const flag = country.flags?.svg || '';
+  const officialName = country.name?.official || '';
+  const capital = country.capital || 'N/A';
+  const population = country.population?.toLocaleString() || 'N/A';
+  const languages = Array.isArray(country.languages)
+    ? country.languages.join(', ')
+    : 'N/A';
+
+  countryInfo.innerHTML = `
+    <div class="country-card">
+      <img src="${flag}" alt="${officialName}" class="flag" />
+      <h2>${officialName}</h2>
+      <p><strong>Capital:</strong> ${capital}</p>
+      <p><strong>Population:</strong> ${population}</p>
+      <p><strong>Languages:</strong> ${languages}</p>
+    </div>
+  `;
+}
+
+function clearResults() {
+  clearCountryList();
+  clearCountryInfo();
+}
+
+function clearCountryList() {
+  countryList.innerHTML = '';
+}
+
+function clearCountryInfo() {
+  countryInfo.innerHTML = '';
+}
