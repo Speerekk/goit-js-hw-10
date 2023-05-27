@@ -53,3 +53,10 @@ ul.country-list li {
 .country-card h2 {
   margin-top: 0;
 }
+
+.flags {
+  width: 16px;
+  height: 11px;
+  vertical-align: middle;
+  margin-right: 5px;
+}

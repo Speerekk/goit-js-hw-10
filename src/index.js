@@ -6,6 +6,7 @@ import Notiflix from 'notiflix';
 const searchBox = document.querySelector('#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
+const flagsContainer = document.querySelector('.flags');
 
 const DEBOUNCE_DELAY = 300;
 
@@ -47,38 +48,40 @@ function handleSearch() {
 }
 
 function showCountryList(countries) {
-  const flagsContainer = document.querySelector('.flags');
-  flagsContainer.innerHTML = '';
+  clearFlags();
 
   countries.forEach(country => {
+    const listItem = document.createElement('li');
+    listItem.textContent = country.name?.official || '';
+    countryList.appendChild(listItem);
+
     const flagImage = new Image();
     flagImage.src = country.flags?.svg || '';
     flagImage.alt = country.name?.official || '';
     flagImage.classList.add('flag');
-    flagsContainer.appendChild(flagImage);
-
-    const listItem = document.createElement('li');
-    listItem.textContent = country.name?.official || '';
-    countryList.appendChild(listItem);
+    listItem.insertBefore(flagImage, listItem.firstChild);
   });
 }
 
+function clearFlags() {
+  flagsContainer.innerHTML = '';
+}
+
 function showCountryInfo(country) {
-  const flag = country.flags?.svg || '';
-  const officialName = country.name?.official || '';
-  const capital = country.capital || 'N/A';
-  const population = country.population?.toLocaleString() || 'N/A';
-  const languages = Array.isArray(country.languages)
-    ? country.languages.join(', ')
-    : 'N/A';
+  const { flags, name, capital, population, languages } = country;
+  const flag = flags?.svg || '';
+  const officialName = name?.official || '';
+  const capitalText = capital || 'N/A';
+  const populationText = population?.toLocaleString() || 'N/A';
+  const languagesText = Array.isArray(languages) ? languages.join(', ') : 'N/A';
 
   countryInfo.innerHTML = `
     <div class="country-card">
       <img src="${flag}" alt="${officialName}" class="flag" />
       <h2>${officialName}</h2>
-      <p><strong>Capital:</strong> ${capital}</p>
-      <p><strong>Population:</strong> ${population}</p>
-      <p><strong>Languages:</strong> ${languages}</p>
+      <p><strong>Capital:</strong> ${capitalText}</p>
+      <p><strong>Population:</strong> ${populationText}</p>
+      <p><strong>Languages:</strong> ${languagesText}</p>
     </div>
   `;
 }
@@ -86,6 +89,7 @@ function showCountryInfo(country) {
 function clearResults() {
   clearCountryList();
   clearCountryInfo();
+  clearFlags();
 }
 
 function clearCountryList() {
