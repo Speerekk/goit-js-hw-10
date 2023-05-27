@@ -47,12 +47,13 @@ function handleSearch() {
 }
 
 function showCountryList(countries) {
-  countryList.innerHTML = '';
-  countries.forEach(country => {
-    const listItem = document.createElement('li');
-    listItem.innerHTML = `<img src="${country.flags.svg}" alt="${country.name.official}" class="flag" /> ${country.name.official}`;
-    countryList.appendChild(listItem);
-  });
+  const markup = countries
+    .map(country => {
+      return `<li><img src="${country.flags.svg}" alt="${country.name.official}" class="flag" /> ${country.name.official}</li>`;
+    })
+    .join('');
+
+  countryList.innerHTML = markup;
 }
 
 function showCountryInfo(country) {
