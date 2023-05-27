@@ -49,11 +49,14 @@ function handleSearch() {
 function showCountryList(countries) {
   const markup = countries
     .map(country => {
-      return `<li><img src="${country.flags.svg}" alt="${country.name.official}" class="flag" /> ${country.name.official}</li>`;
+      const flag = country.flags && country.flags.svg ? country.flags.svg : '';
+      const officialName =
+        country.name && country.name.official ? country.name.official : '';
+      return `<li><img src="${flag}" alt="${officialName}" class="flag" /> ${officialName}</li>`;
     })
     .join('');
 
-  countryList.innerHTML = markup;
+  countryList.innerHTML = `<ul>${markup}</ul>`;
 }
 
 function showCountryInfo(country) {
