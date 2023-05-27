@@ -47,16 +47,20 @@ function handleSearch() {
 }
 
 function showCountryList(countries) {
-  const markup = countries
-    .map(country => {
-      const flag = country.flags && country.flags.svg ? country.flags.svg : '';
-      const officialName =
-        country.name && country.name.official ? country.name.official : '';
-      return `<li><img src="${flag}" alt="${officialName}" class="flag" /> ${officialName}</li>`;
-    })
-    .join('');
+  const flagsContainer = document.querySelector('.flags');
+  flagsContainer.innerHTML = '';
 
-  countryList.innerHTML = `<ul>${markup}</ul>`;
+  countries.forEach(country => {
+    const flagImage = new Image();
+    flagImage.src = country.flags?.svg || '';
+    flagImage.alt = country.name?.official || '';
+    flagImage.classList.add('flag');
+    flagsContainer.appendChild(flagImage);
+
+    const listItem = document.createElement('li');
+    listItem.textContent = country.name?.official || '';
+    countryList.appendChild(listItem);
+  });
 }
 
 function showCountryInfo(country) {

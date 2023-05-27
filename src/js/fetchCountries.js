@@ -1,6 +1,7 @@
 export function fetchCountries(name) {
   const fields = 'name,flags.svg,capital,population,languages';
-  const url = `https://restcountries.com/v3.1/name/${name}?fields=${fields}`;
+  const encodedName = encodeURIComponent(name); // кодируем имя страны, чтобы использовать в URL
+  const url = `https://restcountries.com/v3.1/name/${encodedName}?fields=${fields}`;
 
   return fetch(url)
     .then(response => {
@@ -16,5 +17,9 @@ export function fetchCountries(name) {
       } else {
         throw new Error('Country not found');
       }
+    })
+    .catch(error => {
+      console.error(error);
+      throw new Error('Error fetching country data');
     });
 }
