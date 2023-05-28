@@ -59,6 +59,8 @@ function showCountryList(countries) {
     flagImage.src = country.flags?.svg || '';
     flagImage.alt = country.name?.official || '';
     flagImage.classList.add('flag');
+    flagImage.style.width = '15px';
+    flagImage.style.height = '10px';
     listItem.insertBefore(flagImage, listItem.firstChild);
   });
 }
@@ -73,7 +75,6 @@ function showCountryInfo(country) {
   const officialName = name?.official || '';
   const capitalText = capital || 'N/A';
   const populationText = population?.toLocaleString() || 'N/A';
-  const languagesText = Array.isArray(languages) ? languages.join(', ') : 'N/A';
 
   countryInfo.innerHTML = `
     <div class="country-card">
@@ -81,7 +82,7 @@ function showCountryInfo(country) {
       <h2>${officialName}</h2>
       <p><strong>Capital:</strong> ${capitalText}</p>
       <p><strong>Population:</strong> ${populationText}</p>
-      <p><strong>Languages:</strong> ${languagesText}</p>
+      <p><strong>Languages:</strong> ${Object.values(languages)}</p>
     </div>
   `;
 }
