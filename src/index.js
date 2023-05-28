@@ -59,8 +59,6 @@ function showCountryList(countries) {
     flagImage.src = country.flags?.svg || '';
     flagImage.alt = country.name?.official || '';
     flagImage.classList.add('flag');
-    flagImage.style.width = '15px';
-    flagImage.style.height = '10px';
     listItem.insertBefore(flagImage, listItem.firstChild);
   });
 }
