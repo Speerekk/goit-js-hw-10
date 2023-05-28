@@ -35,19 +35,6 @@ ul.country-list li {
   margin-bottom: 5px;
 }
 
-.flags {
-  width: 20px;
-  height: 14px;
-  vertical-align: middle;
-  margin-right: 5px;
-}
-
-img {
-  width: 19px;
-  height: 13px;
-  margin-right: 5px;
-}
-
 .country-card {
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -60,9 +47,9 @@ img {
   margin-top: 0;
 }
 
-.flags {
+.flag {
   width: 15px;
-  height: 11px;
+  height: auto;
   vertical-align: middle;
   margin-right: 5px;
 }

@@ -1,6 +1,6 @@
 export function fetchCountries(name) {
   const fields = 'name,flags,capital,population,languages';
-  const encodedName = encodeURIComponent(name); // кодируем имя страны, чтобы использовать в URL
+  const encodedName = encodeURIComponent(name);
   const url = `https://restcountries.com/v3.1/name/${encodedName}?fields=${fields}`;
 
   return fetch(url)
